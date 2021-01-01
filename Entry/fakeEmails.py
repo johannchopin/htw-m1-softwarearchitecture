@@ -4,18 +4,23 @@ from dataclasses import dataclass
 from typing import NewType, List
 from time import time
 
+# TODO: Add suspicious keywords
+# TODO: Adjust the timestamp
+# TODO: Register the generated emails into files sorted by date
+
 FAKE = Faker()
 # Fake.seed()
 
 EmailAddress = NewType('EmailAdress', str)
 
 
-@dataclass(frozen=True)
+@dataclass
 class Email:
     """ Structure of an email """
     sender: EmailAddress
     reciever: EmailAddress
     timestamp: int
+    subject: str
     content: str
 
 
@@ -40,11 +45,12 @@ def generateSimpleEmail(emailAdresses: List[EmailAddress]) -> Email:
     """" Generate a fake email from a list of email address """
     sender = choice(emailAdresses)
     reciever = choice(emailAdresses)
+    subject = FAKE.sentence(nb_words=5)
     content = generateEmailContent(nb_max_paragraph=5)
     timestamp = getTimestamp()
-    return Email(sender, reciever, timestamp, content)
+    return Email(sender, reciever, timestamp, subject, content)
 
 
 if __name__ == "__main__":
-    emailAdresses = generateEmailAdresses(50)
+    emailAdresses = generateEmailAdresses(1000)
     print(generateSimpleEmail(emailAdresses))
