@@ -1,7 +1,11 @@
 from faker import Faker
-from random import randint
+from random import randint, choice
+from dataclasses import dataclass
+from typing import NewType, List
 
 FAKE = Faker()
+
+EmailAddress = NewType('EmailAdress', str)
 
 
 @dataclass
@@ -12,11 +16,11 @@ class Email:
     content: str
 
 
-def generateEmails(amount: int):
+def generateEmailAdresses(amount: int) -> List[EmailAddress]:
     return [FAKE.email() for _ in range(amount)]
 
 
-def generateEmailContent(nb_max_paragraph=3, nb_max_sentences_per_paragraph=10):
+def generateEmailContent(nb_max_paragraph=3, nb_max_sentences_per_paragraph=10) -> str:
     paragraph_amount = range(randint(1, nb_max_paragraph))
     return '\n'.join((FAKE.paragraph(
         nb_sentences=nb_max_sentences_per_paragraph,
@@ -24,7 +28,7 @@ def generateEmailContent(nb_max_paragraph=3, nb_max_sentences_per_paragraph=10):
     ) for _ in paragraph_amount))
 
 
-def generateEmailSent(emailAdresses: List[EmailAddress]) -> Email:
+def generateSimpleEmail(emailAdresses: List[EmailAddress]) -> Email:
     sender = choice(emailAdresses)
     reciever = choice(emailAdresses)
     content = generateEmailContent(nb_max_paragraph=5)
@@ -33,4 +37,4 @@ def generateEmailSent(emailAdresses: List[EmailAddress]) -> Email:
 
 if __name__ == "__main__":
     emailAdresses = generateEmailAdresses(50)
-    print(generateEmailSent(emailAdresses))
+    print(generateSimpleEmail(emailAdresses))
