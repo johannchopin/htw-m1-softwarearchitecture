@@ -5,7 +5,6 @@ from typing import NewType, List
 from time import time
 
 # TODO: Add suspicious keywords
-# TODO: Register the generated emails into files sorted by date
 
 FAKE = Faker()
 # Fake.seed()
