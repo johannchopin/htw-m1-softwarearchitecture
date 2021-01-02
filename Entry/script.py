@@ -4,8 +4,13 @@ from datetime import datetime
 from time import sleep
 
 
+def _mkdir_if_not_exists(path: Path):
+    if not path.exists():
+        path.mkdir(parents=True)
+
+
 def recieveEmail(emailAdressPool, path: Path):
-    EMAIL_CONTENT_DIR_NAME_INDEX_SPLIT = 3
+    INDEX_SPLIT = 3
 
     email = generateSimpleEmail(emailAdressPool)
     email_content_hash = str(abs(hash(email.subject + email.content)))
@@ -13,21 +18,17 @@ def recieveEmail(emailAdressPool, path: Path):
 
     (year, month, day) = (str(date.year), str(
         date.month).rjust(2, '0'), str(date.day).rjust(2, '0'))
+
     metadata_fullpath = path.joinpath('meta').joinpath(
         year).joinpath(month).joinpath(day)
-    email_content_fullpath = path.joinpath(
-        'content').joinpath(email_content_hash[:EMAIL_CONTENT_DIR_NAME_INDEX_SPLIT])
-
-    if not metadata_fullpath.exists():
-        metadata_fullpath.mkdir(parents=True)
-
+    _mkdir_if_not_exists(metadata_fullpath)
     with open(metadata_fullpath.joinpath(str(email.timestamp)), 'a+') as f:
         f.write(f"{email.sender} {email.reciever} {email_content_hash}")
 
-    if not email_content_fullpath.exists():
-        email_content_fullpath.mkdir(parents=True)
-
-    with open(email_content_fullpath.joinpath(email_content_hash[EMAIL_CONTENT_DIR_NAME_INDEX_SPLIT:]), 'a+') as f:
+    email_content_fullpath = path.joinpath(
+        'content').joinpath(email_content_hash[:INDEX_SPLIT])
+    _mkdir_if_not_exists(email_content_fullpath)
+    with open(email_content_fullpath.joinpath(email_content_hash[INDEX_SPLIT:]), 'a+') as f:
         f.write(f"{email.subject}\n\n{email.content}")
 
 
