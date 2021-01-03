@@ -1,7 +1,8 @@
-from fakeEmails import Email, generateEmailAdresses, generateSimpleEmail, getTimestamp
+import os
 from pathlib import Path
 from datetime import datetime
 from time import sleep
+from fakeEmails import Email, generateEmailAdresses, generateSimpleEmail, getTimestamp
 
 
 def _mkdir_if_not_exists(path: Path):
@@ -9,7 +10,9 @@ def _mkdir_if_not_exists(path: Path):
         path.mkdir(parents=True)
 
 
-def recieveEmail(emailAdressPool, path: Path):
+def _get_latest_filename(path: Path) -> int:
+    return len(os.listdir(path))
+
     INDEX_SPLIT = 3
 
     email = generateSimpleEmail(emailAdressPool)
@@ -21,15 +24,16 @@ def recieveEmail(emailAdressPool, path: Path):
 
     metadata_fullpath = path.joinpath('meta').joinpath(
         year).joinpath(month).joinpath(day)
-    _mkdir_if_not_exists(metadata_fullpath)
-    with open(metadata_fullpath.joinpath(str(email.timestamp)), 'a+') as f:
-        f.write(f"{email.sender} {email.reciever} {email_content_hash}")
+    save_content_in_file(path=metadata_fullpath,
+                         filename=_get_latest_filename(metadata_fullpath),
+                         content=f"{email.sender} {email.reciever} {email.timestamp} {email_content_hash}\n")
 
     email_content_fullpath = path.joinpath(
         'content').joinpath(email_content_hash[:INDEX_SPLIT])
-    _mkdir_if_not_exists(email_content_fullpath)
-    with open(email_content_fullpath.joinpath(email_content_hash[INDEX_SPLIT:]), 'a+') as f:
-        f.write(f"{email.subject}\n\n{email.content}")
+    save_content_in_file(path=email_content_fullpath,
+                         filename=email_content_hash[INDEX_SPLIT:],
+                         content=f"{email.subject}\n\n{email.content}",
+                         check_file_size=False)
 
 
 if __name__ == "__main__":
