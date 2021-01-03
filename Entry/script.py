@@ -4,15 +4,39 @@ from datetime import datetime
 from time import sleep
 from fakeEmails import Email, generateEmailAdresses, generateSimpleEmail, getTimestamp
 
+MAX_LINE_IN_METADA_FILE = 10_000
 
-def _mkdir_if_not_exists(path: Path):
+
+def mkdir_if_not_exists(path: Path):
     if not path.exists():
         path.mkdir(parents=True)
 
 
-def _get_latest_filename(path: Path) -> int:
-    return len(os.listdir(path))
+def get_latest_filename(path: Path) -> int:
+    return max(1, len(os.listdir(path)))
 
+
+def record_metadata(*, path: Path, content: str, filename=False):
+    global MAX_LINE_IN_METADA_FILE
+    mkdir_if_not_exists(path)
+    filename = filename if filename else str(get_latest_filename(path))
+    fullpath = path.joinpath(filename)
+
+    if fullpath.exists():
+        with open(fullpath, 'r') as f:
+            if(sum(1 for _ in f) >= MAX_LINE_IN_METADA_FILE):
+                return record_metadata(path=path, filename=str(int(filename)+1), content=content)
+    with open(fullpath, 'a+') as f:
+        f.write(content)
+
+
+def record_content(*, path: Path, filename: str, content: str):
+    mkdir_if_not_exists(path)
+    with open(path.joinpath(filename), 'w') as f:
+        f.write(content)
+
+
+def recieveEmail(emailAdressPool, path: Path):
     INDEX_SPLIT = 3
 
     email = generateSimpleEmail(emailAdressPool)
@@ -24,16 +48,14 @@ def _get_latest_filename(path: Path) -> int:
 
     metadata_fullpath = path.joinpath('meta').joinpath(
         year).joinpath(month).joinpath(day)
-    save_content_in_file(path=metadata_fullpath,
-                         filename=_get_latest_filename(metadata_fullpath),
-                         content=f"{email.sender} {email.reciever} {email.timestamp} {email_content_hash}\n")
+    record_metadata(path=metadata_fullpath,
+                    content=f"{email.sender} {email.reciever} {email.timestamp} {email_content_hash}\n")
 
     email_content_fullpath = path.joinpath(
         'content').joinpath(email_content_hash[:INDEX_SPLIT])
-    save_content_in_file(path=email_content_fullpath,
-                         filename=email_content_hash[INDEX_SPLIT:],
-                         content=f"{email.subject}\n\n{email.content}",
-                         check_file_size=False)
+    record_content(path=email_content_fullpath,
+                   filename=email_content_hash[INDEX_SPLIT:],
+                   content=f"{email.subject}\n\n{email.content}")
 
 
 if __name__ == "__main__":
@@ -43,5 +65,5 @@ if __name__ == "__main__":
 
     # Generate Emails
     while True:
-        sleep(0.1)
+        sleep(0.0001)
         recieveEmail(emails, DATA_PATH)
