@@ -75,6 +75,7 @@ if __name__ == "__main__":
     CHUNK_AMOUNT_LIMIT = 100
     EMAIL_ADRESS_AMOUNT = 100
     EMAIL_IN_CHUNK = 250
+    SPAM_RATE = 0.1
     SLEEP_TIME_IN_S = 1
 
     # Set up
@@ -91,7 +92,7 @@ if __name__ == "__main__":
         startTime = time.time()
         filepath = DATA_PATH.joinpath(str(email_chunk))
         emails = [generateSimpleEmail(
-            emailsAdresses).__dict__ for _ in range(EMAIL_IN_CHUNK)]
+            emailsAdresses, SPAM_RATE).__dict__ for _ in range(EMAIL_IN_CHUNK)]
 
         with open(filepath, 'w') as f:
             json.dump(emails, f, indent=2)

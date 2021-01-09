@@ -1,6 +1,6 @@
 import json
 from faker import Faker
-from random import randint, choice
+from random import randint, choice, random
 from dataclasses import dataclass
 from typing import NewType, List
 from time import time
@@ -44,24 +44,30 @@ def generateEmailContent(nb_max_paragraph=3, nb_max_sentences_per_paragraph=10) 
     ) for _ in paragraph_amount))
 
 
-def getTimestamp(precision_after_second=6, additional_seconds=0):
+def getTimestamp(precision_after_second=6):
     """
         Helper that return a timestamp, with additional seconds if provided
         The returned timestamp is in ms (10^-6s)
     """
     shift_after_seconds = 10**precision_after_second
-    return int(time() * shift_after_seconds + additional_seconds * shift_after_seconds)
+    return int(time() * shift_after_seconds)
 
 
-def generateSimpleEmail(emailAdresses: List[EmailAddress], withTimestamp=None) -> Email:
+def generateSpamContent(emailContent: str) -> str:
+    return emailContent + " fuckfuckfuck"
+
+
+def generateSimpleEmail(emailAdresses: List[EmailAddress], spamRate: float) -> Email:
     """" Generate a fake email from a list of email address, a custom timestamp cam be provided """
     sender = choice(emailAdresses)
     reciever = choice(emailAdresses)
-    timestamp = withTimestamp if withTimestamp else getTimestamp()
+    timestamp = getTimestamp()
     subject = FAKE.sentence(nb_words=5)
     content = generateEmailContent(nb_max_paragraph=5)
+    if random() < spamRate:
+        content = generateSpamContent(content)
     return Email(sender, reciever, timestamp, subject, content)
 
 
 if __name__ == "__main__":
-    print(emails)
+    print('main')
