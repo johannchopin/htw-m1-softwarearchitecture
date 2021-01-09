@@ -2,9 +2,12 @@ import time
 import os
 from pathlib import Path
 
-if __name__ == "__main__":
-    DATA_PATH = Path('./data')
 
+DATA_PATH = Path('./data')
+
+
+def run():
+    global DATA_PATH
     while True:
         files = os.listdir(DATA_PATH)
 
@@ -19,3 +22,7 @@ if __name__ == "__main__":
             # Wait for new files to come
             print("Sleeping...")
             time.sleep(1)
+
+
+if __name__ == "__main__":
+    run()
