@@ -1,3 +1,4 @@
+import json
 from faker import Faker
 from random import randint, choice
 from dataclasses import dataclass
@@ -20,6 +21,14 @@ class Email:
     timestamp: int
     subject: str
     content: str
+
+
+# class EmailJsonEncoder(json.JSONEncoder):
+#     def default(self, obj):
+#         if isinstance(obj, Email):
+#             return obj.__dict__
+#         # Base class default() raises TypeError:
+#         return json.JSONEncoder.default(self, obj)
 
 
 def generateEmailAdresses(amount: int) -> List[EmailAddress]:
@@ -55,5 +64,4 @@ def generateSimpleEmail(emailAdresses: List[EmailAddress], withTimestamp=None) -
 
 
 if __name__ == "__main__":
-    emailAdresses = generateEmailAdresses(1000)
-    print(generateSimpleEmail(emailAdresses))
+    print(emails)

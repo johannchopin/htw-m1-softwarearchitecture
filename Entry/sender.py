@@ -1,7 +1,8 @@
 import os
+import json
+import time
 from pathlib import Path
 from datetime import datetime
-from time import sleep
 from fakeEmails import Email, generateEmailAdresses, generateSimpleEmail, getTimestamp
 
 MAX_LINE_IN_METADA_FILE = 10_000
@@ -58,12 +59,42 @@ def recieveEmail(emailAdressPool, path: Path):
                    content=f"{email.subject}\n\n{email.content}")
 
 
-if __name__ == "__main__":
-    # Set up
-    DATA_PATH = Path("./data")
-    emails = generateEmailAdresses(50)
-
-    # Generate Emails
+def waitIfFileChunkLimitReached(path: Path, limit: int, sleep_time: int):
     while True:
-        sleep(0.0001)
-        recieveEmail(emails, DATA_PATH)
+        file_in_queue = len(os.listdir(DATA_PATH))
+
+        if file_in_queue >= limit:
+            print('Sleeping...')
+            time.sleep(sleep_time)
+        else:
+            return
+
+
+if __name__ == "__main__":
+    DATA_PATH = Path("./data")
+    CHUNK_AMOUNT_LIMIT = 100
+    EMAIL_ADRESS_AMOUNT = 100
+    EMAIL_IN_CHUNK = 250
+    SLEEP_TIME_IN_S = 1
+
+    # Set up
+    emailsAdresses = generateEmailAdresses(EMAIL_ADRESS_AMOUNT)
+    mkdir_if_not_exists(DATA_PATH)
+
+    # Main
+    email_chunk = get_latest_filename(DATA_PATH)
+    # Check tout les 1000 fichiers → si 5000 alors pause; puis recheck, si correct → generate email
+    while True:
+        waitIfFileChunkLimitReached(
+            DATA_PATH, CHUNK_AMOUNT_LIMIT, SLEEP_TIME_IN_S)
+
+        startTime = time.time()
+        filepath = DATA_PATH.joinpath(str(email_chunk))
+        emails = [generateSimpleEmail(
+            emailsAdresses).__dict__ for _ in range(EMAIL_IN_CHUNK)]
+
+        with open(filepath, 'w') as f:
+            json.dump(emails, f, indent=2)
+
+        email_chunk += 1
+        print(f'{email_chunk} in {time.time() - startTime}')
