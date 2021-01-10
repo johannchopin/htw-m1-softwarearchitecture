@@ -16,4 +16,4 @@ def load_and_get_table_df(keys_space_name, table_name):
     return table_df
 
 mails = load_and_get_table_df("lambda", "email")
-mails.show()
+mails.show() 
