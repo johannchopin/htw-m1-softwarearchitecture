@@ -1,3 +1,4 @@
+from src.speed.SpeedLayer import SpeedLayer
 import time
 import os
 import json
@@ -12,6 +13,7 @@ class Receiver:
 
     def __init__(self):
         self.batchLayer = BatchLayer()
+        self.speedLayer = SpeedLayer()
 
     def _get_emails_in_file(self, filepath: Path) -> List[dict]:
         print(f"Reading {filepath}")
@@ -23,6 +25,7 @@ class Receiver:
         emails = self._get_emails_in_file(filepath)
         for email in emails:
             self.batchLayer.process_email(email)
+            self.speedLayer.process_email(email)
 
     def run(self):
         while True:
