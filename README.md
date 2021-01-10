@@ -15,9 +15,9 @@ python -m pip freeze > requirements.txt
 deactivate
 ```
 
-### Batch Layer
-Build cassandra image: `docker built -t cassandra-custom-batch batch`
-Run cassandra image: `docker run -d -p 9042:9042 --name cassandra-batch cassandra-custom-batch`
+### Batch Layer (cd into batch folder first)
+Build cassandra image: `docker build -t cassandracustom .`
+Run cassandra image: `docker run -d -p 9042:9042 --name cassandra cassandracustom`
 Set up image: 
 ```bash
 docker exec -it cassandra-batch bash
