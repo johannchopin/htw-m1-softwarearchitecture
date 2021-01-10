@@ -1,8 +1,8 @@
 # htw-m1-softwarearchitecture
 
 ## Set up
-### Batch Layer
-Build cassandra image: `docker built -t cassandracustom batch`
+### Batch Layer (cd into batch folder first)
+Build cassandra image: `docker build -t cassandracustom .`
 Run cassandra image: `docker run -d -p 9042:9042 --name cassandra cassandracustom`
 Set up image: 
 ```bash
