@@ -1,13 +1,19 @@
-#Example File
-#Source: https://realpython.com/pyspark-intro/
-#https://max6log.wordpress.com/2020/05/25/introduction-to-pyspark-on-docker/
+# Example File
+# Source: https://realpython.com/pyspark-intro/
+# https://max6log.wordpress.com/2020/05/25/introduction-to-pyspark-on-docker/
 
 import pyspark
 
 sc = pyspark.SparkContext('local[*]')
+sqlContext = pyspark.SQLContext(sc)
 
-txt = sc.textFile('file:////usr//share//X11//Xcms.txt')
+# Loads and returns data frame for a table including key space given
+def load_and_get_table_df(keys_space_name, table_name):
+    table_df = sqlContext.read\
+        .format("org.apache.spark.sql.cassandra")\
+        .options(table=table_name, keyspace=keys_space_name)\
+        .load()
+    return table_df
 
-python_lines = txt.filter(lambda line: 'the' in line.lower())
-
-print("The number of lines containing 'the' in your file is: ", python_lines.count())
+mails = load_and_get_table_df("lambda", "email")
+mails.show()
