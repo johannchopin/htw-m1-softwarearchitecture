@@ -3,9 +3,11 @@ import json
 import time
 from pathlib import Path
 from datetime import datetime
-from fakeEmails import Email, generateEmailAdresses, generateEmails
+from .. import CassandraWrapper
+from .fakeEmails import Email, generateEmailAdresses, generateEmails
 
 DATA_PATH = Path("./data")
+CASSANDRA = CassandraWrapper()
 CHUNK_AMOUNT_LIMIT = 100
 EMAIL_ADRESS_AMOUNT = 100
 EMAIL_IN_CHUNK = 250
