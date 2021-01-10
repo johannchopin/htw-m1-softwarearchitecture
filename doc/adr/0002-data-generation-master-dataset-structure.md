@@ -26,20 +26,20 @@ The dataclass `Email` describes all metadata:
 class Email:
     """ Structure of an email """
     sender: EmailAddress
-    reciever: EmailAddress
+    receiver: EmailAddress
     timestamp: int
     subject: str
-    content: str
+    body: str
 ```
 
 ## Structure of the master dataset
 
 Each email is stored in two places:
-* the metadata are represented on one line per unique email: `sender_email reciever_email timestamp_in_ms hash_id`
+* the metadata are represented on one line per unique email: `sender_email receiver_email timestamp_in_ms hash_id`
   * stored in `data/meta/YYYY/MM/DD/X` with X an number starting from 1
   * each text file regroup 10 000 lines of email
 * the `hash_id` is used to retrieve the subject and body of the email from the text file: `subject\n\nbody`
-  * stored in `data/content/XXX/YYYYYYYYYYYYYYYY` with XXX are the first 3 digits of the `hash_id`, and YYYY... the rest of them
+  * stored in `data/body/XXX/YYYYYYYYYYYYYYYY` with XXX are the first 3 digits of the `hash_id`, and YYYY... the rest of them
   * the subject is written on one line
   * the body can be of any length
   

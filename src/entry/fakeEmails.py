@@ -17,10 +17,10 @@ EmailAddress = NewType('EmailAdress', str)
 class Email:
     """ Structure of an email """
     sender: EmailAddress
-    reciever: EmailAddress
+    receiver: EmailAddress
     timestamp: int
     subject: str
-    content: str
+    body: str
 
 
 class EmailJsonEncoder(json.JSONEncoder):
@@ -35,7 +35,7 @@ def generateEmailAdresses(amount: int) -> List[EmailAddress]:
     return [FAKE.email() for _ in range(amount)]
 
 
-def generateEmailContent(nb_max_paragraph=3, nb_max_sentences_per_paragraph=10) -> str:
+def generateEmailBody(nb_max_paragraph=3, nb_max_sentences_per_paragraph=10) -> str:
     """ Generate the body of an email, i.e. the message """
     paragraph_amount = range(randint(1, nb_max_paragraph))
     return '\n'.join((FAKE.paragraph(
@@ -53,20 +53,20 @@ def getTimestamp(precision_after_second=6):
     return int(time() * shift_after_seconds)
 
 
-def generateSpamContent(emailContent: str) -> str:
-    return emailContent + " fuckfuckfuck"
+def generateSpamBody(emailBody: str) -> str:
+    return emailBody + " fuckfuckfuck"
 
 
 def generateSimpleEmail(emailAdresses: List[EmailAddress], spam_rate=0.0, from_sender='') -> Email:
     """" Generate a fake email from a list of email address, a custom timestamp cam be provided """
     sender = choice(emailAdresses) if not from_sender else from_sender
-    reciever = choice(emailAdresses)
+    receiver = choice(emailAdresses)
     timestamp = getTimestamp()
     subject = FAKE.sentence(nb_words=5)
-    content = generateEmailContent(nb_max_paragraph=5)
+    body = generateEmailBody(nb_max_paragraph=5)
     if random() < spam_rate:
-        content = generateSpamContent(content)
-    return Email(sender, reciever, timestamp, subject, content)
+        body = generateSpamBody(body)
+    return Email(sender, receiver, timestamp, subject, body)
 
 
 def generateFloodEmail(emailAdresses, emailGeneratedCount):
