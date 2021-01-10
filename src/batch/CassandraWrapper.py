@@ -8,13 +8,14 @@ from .singleton import singleton
 class CassandraWrapper:
     def __init__(self):
         self.cluster = Cluster(['127.0.0.1'], port=9042)
-        self.session = self.cluster.connect('', wait_for_all_pools=True)
-        self._setup_db()
+        self._setup_db()  # Create the lambda keyspace
+        self.session = self.cluster.connect('lambda', wait_for_all_pools=True)
 
     def execute(self, query):
         self.session.execute(query)
 
     def _setup_db(self):
+        self.session = self.cluster.connect('', wait_for_all_pools=True)
         self._execute_silently(
             "create keyspace lambda WITH replication = {'class':'SimpleStrategy', 'replication_factor' : 3};")
         self.execute('USE lambda')
