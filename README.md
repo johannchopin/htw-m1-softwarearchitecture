@@ -11,7 +11,7 @@ source .venv/bin/activate
 python -m pip install -r requiremetns.txt
 # Export dependancies
 python -m pip freeze > requirements.txt
-# Exit venvdocker
+# Exit Virtual env
 deactivate
 ```
 
