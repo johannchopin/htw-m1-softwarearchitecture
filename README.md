@@ -1,4 +1,4 @@
-# htw-m1-softwarearchitecture
+# HTW M1 Softwarearchitecture
 
 ## Set up
 ## Virtual Environment for python
@@ -11,27 +11,15 @@ source .venv/bin/activate
 python -m pip install -r requiremetns.txt
 # Export dependancies
 python -m pip freeze > requirements.txt
-# Exit venv
+# Exit Virtual env
 deactivate
 ```
 
+### Entry point
+Launch sender: `python -m src.entry.sender`
+Launch receiver: `python -m src.entry.receiver`
+
 ### Batch Layer
 Build cassandra image: `docker build -t cassandra-batch src/batch`  
-Run cassandra image: `docker run -d -p 9042:9042 --name cassandra_b cassandra-batch`  
-Set up image: 
-```bash
-docker exec -it cassandra-batch bash
-cqlsh
-# create cassandra's keyspace
-create keyspace lambda WITH replication = {'class':'SimpleStrategy', 'replication_factor' : 3};
-use lambda;
-# create table emails
-create table emails ( id TEXT PRIMARY KEY, sender TEXT, receiver TEXT, timestamp TIMESTAMP, subject TEXT, body TEXT);
-exit
-exit
-```
-Or fast
-```bash
-docker exec -it cassandra-batch bash
-cqlsh --execute "create keyspace lambda WITH replication = {'class':'SimpleStrategy', 'replication_factor' : 3}; use lambda; create table emails ( id TEXT PRIMARY KEY, sender TEXT, receiver TEXT, timestamp TIMESTAMP, subject TEXT, body TEXT);"
-```
+Run cassandra image: `docker run -d -p 9042:9042 --name cassandra_b cassandra-batch`
+Run PySpark : `python src/batch/pyspark-processing`
