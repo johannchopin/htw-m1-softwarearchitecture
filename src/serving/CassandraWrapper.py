@@ -9,7 +9,7 @@ class CassandraWrapper:
         self.session = self.cluster.connect('lambda_views', wait_for_all_pools=True)
 
     def execute(self, query):
-        self.session.execute(query)
+        return self.session.execute(query)
 
     def _setup_db(self):
         self.session = self.cluster.connect('', wait_for_all_pools=True)
@@ -18,6 +18,7 @@ class CassandraWrapper:
         self.execute('USE lambda_views')
         self._execute_silently(
             "create table spams ( email TEXT PRIMARY KEY);")
+        self._execute_silently("insert into spams (email) values ('test@test.test')")
 
     def _execute_silently(self, query):
         try:
