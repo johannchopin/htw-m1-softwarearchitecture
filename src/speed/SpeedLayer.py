@@ -43,7 +43,4 @@ class SpeedLayer:
         for item in list_dictionary:
             if item in email["body"]:
                 spam_word_counter += 1
-        if spam_word_counter >= len(email["body"].split()) / 2:
-            return True
-        else:
-            return False
+        return spam_word_counter >= len(email["body"].split()) / 2
