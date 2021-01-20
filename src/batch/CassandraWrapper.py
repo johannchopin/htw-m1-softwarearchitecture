@@ -1,10 +1,7 @@
 # pip install cassandra-driver
 from cassandra import AlreadyExists
 from cassandra.cluster import Cluster
-from singleton import singleton
 
-
-@singleton
 class CassandraWrapper:
     def __init__(self):
         self.cluster = Cluster(['127.0.0.1'], port=9042)
