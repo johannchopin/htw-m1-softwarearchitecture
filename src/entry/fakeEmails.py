@@ -3,7 +3,7 @@ from faker import Faker
 from random import randint, choice, random
 from dataclasses import dataclass
 from typing import NewType, List
-from datetime import datetime
+from time import time
 
 # TODO: Add suspicious keywords
 
@@ -44,8 +44,13 @@ def generateEmailBody(nb_max_paragraph=3, nb_max_sentences_per_paragraph=10) -> 
     ) for _ in paragraph_amount))
 
 
-def getTimestamp():
-    return datetime.now().isoformat()
+def getTimestamp(precision_after_second=3):
+    """
+        Helper that return a timestamp, with additional seconds if provided
+        The returned timestamp is in ms (10^-3s)
+    """
+    shift_after_seconds = 10**precision_after_second
+    return int(time() * shift_after_seconds)
 
 
 def generateSpamBody(emailBody: str) -> str:

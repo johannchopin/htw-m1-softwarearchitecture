@@ -1,9 +1,9 @@
 import os
-from ..serving.CassandraWrapper import CassandraWrapper
+from ..serving.CassandraViews import CassandraViewsInstance
 
 class SpeedLayer:
     def __init__(self):
-        self.cassandra = CassandraWrapper()
+        self.cassandra = CassandraViewsInstance
         self.dictionary = self.read_suspicious_keywords_dictionnary(self.get_keywords_filepath())
 
     def get_keywords_filepath(self):
