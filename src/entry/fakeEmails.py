@@ -57,13 +57,14 @@ def generateSpamBody(emailBody: str) -> str:
     return emailBody + " fuckfuckfuck"
 
 
-def generateSimpleEmail(emailAdresses: List[EmailAddress], spam_rate=0.0, from_sender='') -> Email:
-    """" Generate a fake email from a list of email address, a custom timestamp cam be provided """
+def generateSimpleEmail(emailAdresses: List[EmailAddress], spam_rate=0.0, from_sender='', with_body=False) -> Email:
+    """" Generate a fake email from a list of email address, a custom sender and body message can be provided (for flood) """
     sender = choice(emailAdresses) if not from_sender else from_sender
     receiver = choice(emailAdresses)
     timestamp = getTimestamp()
     subject = FAKE.sentence(nb_words=5)
-    body = generateEmailBody(nb_max_paragraph=5)
+    body = generateEmailBody(
+        nb_max_paragraph=5) if not with_body else with_body
     if random() < spam_rate:
         body = generateSpamBody(body)
     return Email(sender, receiver, timestamp, subject, body)
@@ -71,7 +72,8 @@ def generateSimpleEmail(emailAdresses: List[EmailAddress], spam_rate=0.0, from_s
 
 def generateFloodEmail(emailAdresses, emailGeneratedCount):
     flooder_adress = choice(emailAdresses)
-    return (generateSimpleEmail(emailAdresses, from_sender=flooder_adress) for _ in range(emailGeneratedCount))
+    body = generateEmailBody(nb_max_paragraph=5)
+    return (generateSimpleEmail(emailAdresses, from_sender=flooder_adress, with_body=body) for _ in range(emailGeneratedCount))
 
 
 def generateEmails(emailAdresses: List[EmailAddress], spam_rate=0.0, flood_rate=0.0, *, email_amount=0):

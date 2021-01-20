@@ -1,7 +1,7 @@
 # pip install cassandra-driver
 from cassandra import AlreadyExists
 from cassandra.cluster import Cluster
-from .singleton import singleton
+from singleton import singleton
 
 
 @singleton
