@@ -8,7 +8,7 @@ class BatchLayer:
         self.batchProcessing = BatchProcessing(self.cassandra)
 
     def process_email(self, email: Email):
-        self._insert_email_in_db(email)
+        # self._insert_email_in_db(email)
         self.batchProcessing.process()
 
     def _get_email_id(self, email: Email):

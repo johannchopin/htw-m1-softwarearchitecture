@@ -1,4 +1,4 @@
-from ..serving.CassandraViews import CassandraViewsInstance
+# from ..serving.CassandraViews import CassandraViewsInstance
 import os
 
 EMAIL_CHUNKS_LENGTH = 20
@@ -7,7 +7,7 @@ EMAIL_TIMESTAMP_LIMIT = 2 * 10^6 # TODO: Lol name
 class BatchProcessing:
     def __init__(self, masterDatasetCassandraInstance):
         self.cassandraMasterDataset = masterDatasetCassandraInstance
-        self.cassandraViews = CassandraViewsInstance
+        # self.cassandraViews = CassandraViewsInstance
     
     def getSendersEmailAdress(self):
         sendersResponse = self.cassandraMasterDataset.execute("SELECT sender FROM emails;")
@@ -23,24 +23,32 @@ class BatchProcessing:
         # async shit
         senderEmailAdresses = self.getSendersEmailAdress()
         
-        for email in senderEmailAdresses:
-            self.processEmail(email)
+        for emailAdress in senderEmailAdresses:
+            self.processEmail(emailAdress)
 
     def areEmailsFromFlood(self, emails, emailsCount):
         counter = 0
         while (counter + EMAIL_CHUNKS_LENGTH) < emailsCount:
             timestampDiff = abs(int(emails._current_rows[counter].timestamp) - int(emails._current_rows[counter + EMAIL_CHUNKS_LENGTH].timestamp))
-            
-            print(timestampDiff)
+            if timestampDiff <= EMAIL_TIMESTAMP_LIMIT:
+                return True
             counter += 1
+        return False
 
-    def processEmail(self, email):
-        emailsResponse = self.cassandraMasterDataset.execute(f"select * from emails where sender='{email}' ALLOW FILTERING;")
+    def processEmail(self, emailAddress):
+        emailsResponse = self.cassandraMasterDataset.execute(f"select * from emails where sender='{emailAddress}' ALLOW FILTERING;")
         emailsCount = len(emailsResponse._current_rows)
 
         isFlood = self.areEmailsFromFlood(emailsResponse, emailsCount)
-        print(isFlood)
+        if isFlood:
+            print(F"Flood from adress {emailAddress}")
         #for emailResponse in emailsResponse:
             #print(emailResponse.sender)
         #os.kill()
         #FUCK THIS SHIT!
+
+if __name__ == "__main__":
+    from CassandraWrapper import CassandraWrapper
+    batchProcessing = BatchProcessing(CassandraWrapper())
+    batchProcessing.process()
+    

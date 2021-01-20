@@ -11,7 +11,8 @@ class SpeedLayer:
         return os.path.join(dirname, '../Spam_Keywords.txt')
 
     def process_email(self, email):
-        print(self.is_spam(email))
+        # print(self.is_spam(email))
+        pass
 
     def is_spam(self, email):
         contains_mail_suspicious_keyword = self.contains_mail_suspicious_keyword(email)
