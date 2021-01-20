@@ -18,7 +18,6 @@ class CassandraWrapper:
         self.execute('USE lambda_views')
         self._execute_silently(
             "create table spams ( email TEXT PRIMARY KEY);")
-        self._execute_silently("insert into spams (email) values ('test@test.test')")
 
     def _execute_silently(self, query):
         try:
