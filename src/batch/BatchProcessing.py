@@ -1,4 +1,4 @@
-# from ..serving.CassandraViews import CassandraViewsInstance
+from ..serving.CassandraViews import CassandraViewsInstance
 import os
 
 EMAIL_CHUNKS_LENGTH = 20
@@ -7,7 +7,7 @@ EMAIL_TIMESTAMP_LIMIT = 2 * 10^6 # TODO: Lol name
 class BatchProcessing:
     def __init__(self, masterDatasetCassandraInstance):
         self.cassandraMasterDataset = masterDatasetCassandraInstance
-        # self.cassandraViews = CassandraViewsInstance
+        self.cassandraViews = CassandraViewsInstance
     
     def getSendersEmailAdress(self):
         sendersResponse = self.cassandraMasterDataset.execute("SELECT sender FROM emails;")
@@ -41,7 +41,10 @@ class BatchProcessing:
 
         isFlood = self.areEmailsFromFlood(emailsResponse, emailsCount)
         if isFlood:
-            print(F"Flood from adress {emailAddress}")
+            print(emailAddress)
+            #self.cassandraViews.execute(f"INSERT INTO {self.cassandraViews.getSpamsTableName()}(email) VALUES('{emailAddress}')")
+            return
+        # TODO: detect if the body content of emails have spam keywords
         #for emailResponse in emailsResponse:
             #print(emailResponse.sender)
         #os.kill()
@@ -51,4 +54,3 @@ if __name__ == "__main__":
     from CassandraWrapper import CassandraWrapper
     batchProcessing = BatchProcessing(CassandraWrapper())
     batchProcessing.process()
-    
