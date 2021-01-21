@@ -2,10 +2,12 @@
 from cassandra import AlreadyExists
 from cassandra.cluster import Cluster
 
+
 class CassandraWrapper:
-    def __init__(self):
+    def __init__(self, keyspace='lambda'):
         self.cluster = Cluster(['127.0.0.1'], port=9042)
-        self._setup_db()  # Create the lambda keyspace
+        self.keyspace = keyspace
+        self._setup_db()  # Create the keyspace
         self.session = self.cluster.connect('lambda', wait_for_all_pools=True)
 
     def execute(self, query):
@@ -14,8 +16,8 @@ class CassandraWrapper:
     def _setup_db(self):
         self.session = self.cluster.connect('', wait_for_all_pools=True)
         self._execute_silently(
-            "create keyspace lambda WITH replication = {'class':'SimpleStrategy', 'replication_factor' : 3};")
-        self.execute('USE lambda')
+            f"create keyspace {self.keyspace} WITH replication = {{'class':'SimpleStrategy', 'replication_factor' : 3}};")
+        self.execute(f"USE {self.keyspace}")
         self._execute_silently(
             "create table emails ( id TEXT PRIMARY KEY, sender TEXT, receiver TEXT, timestamp TEXT, subject TEXT, body TEXT);")
 
