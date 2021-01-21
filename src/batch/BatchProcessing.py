@@ -27,6 +27,7 @@ class BatchProcessing:
             self.processEmail(emailAdress)
 
     def areEmailsFromFlood(self, emails, emailsCount):
+        # TODO: refactor to for loop
         counter = 0
         while (counter + EMAIL_CHUNKS_LENGTH) < emailsCount:
             timestamp1 = emails._current_rows[counter].timestamp
@@ -47,11 +48,14 @@ class BatchProcessing:
             # self.cassandraViews.execute(f"INSERT INTO {self.cassandraViews.getSpamsTableName()}(email) VALUES('{emailAddress}')")
             print(emailAddress)
             return
-        # TODO: detect if the body content of emails have spam keywords
+        # TODO: detect if the body content of emails have spam keywords → see SpeedLayer logic
+        # If spam
+        #   then insert into DB (reuse the execute instruction ⬆️)
+
+        # Testing:
         # for emailResponse in emailsResponse:
             # print(emailResponse.sender)
         # os.kill()
-        # FUCK THIS SHIT !
 
     def _timestamp_diff(self, timestamp1: datetime, timestamp2: datetime) -> bool:
         return abs(timestamp1.microsecond - timestamp2.microsecond)
