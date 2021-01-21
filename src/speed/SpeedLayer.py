@@ -1,4 +1,5 @@
 import os
+from typing import List
 from ..serving.CassandraViews import CassandraViewsInstance
 
 class SpeedLayer:
@@ -29,15 +30,9 @@ class SpeedLayer:
         """)
         return len(matching_email_count._current_rows)
 
-    def read_suspicious_keywords_dictionnary(self, filePath):
-        file = open(filePath, 'r')
-        list = []
-        while True:
-            line = file.readline()
-            if not line:
-                break
-            list.append(line)
-        return list
+    def read_suspicious_keywords_dictionnary(self, filePath) -> List[str]:
+        with open(filePath, 'r') as f:
+            return [keyword for keyword in f if keyword]
 
     def check_spam_with_dictionary(self, list_dictionary, email):
         spam_word_counter = 0
