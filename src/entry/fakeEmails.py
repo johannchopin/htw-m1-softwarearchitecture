@@ -1,14 +1,19 @@
 import json
+import os
 from faker import Faker
 from random import randint, choice, random
 from dataclasses import dataclass
 from typing import NewType, List
 from time import time
 
-# TODO: Add suspicious keywords
 
 FAKE = Faker()
 # Fake.seed()
+
+_SPAM_WORDLIST_SOURCE = os.path.join(
+    os.path.dirname(os.path.dirname(__file__)),
+    'Spam_Keywords.txt')
+SPAM_WORDLIST = [word.strip() for word in open(_SPAM_WORDLIST_SOURCE)]
 
 EmailAddress = NewType('EmailAdress', str)
 
@@ -54,7 +59,14 @@ def getTimestamp(precision_after_second=3):
 
 
 def generateSpamBody(emailBody: str) -> str:
-    return emailBody + " fuckfuckfuck"
+    global SPAM_WORDLIST
+    SPAM_WORD_AFTER_N_WORDS = 10
+
+    words = emailBody.split()
+    for i in range(0, len(words), SPAM_WORD_AFTER_N_WORDS):
+        words[i] = choice(SPAM_WORDLIST)
+
+    return ' '.join(words)
 
 
 def generateSimpleEmail(emailAdresses: List[EmailAddress], spam_rate=0.0, from_sender='', with_body=False) -> Email:
@@ -89,4 +101,5 @@ def generateEmails(emailAdresses: List[EmailAddress], spam_rate=0.0, flood_rate=
 
 
 if __name__ == "__main__":
-    getTimestamp()
+    print(generateSpamBody(generateEmailBody(
+        nb_max_paragraph=5)))
