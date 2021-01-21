@@ -2,10 +2,12 @@ import os
 from typing import List
 from ..serving.CassandraViews import CassandraViewsInstance
 
+
 class SpeedLayer:
     def __init__(self):
         self.cassandra = CassandraViewsInstance
-        self.dictionary = self.read_suspicious_keywords_dictionnary(self.get_keywords_filepath())
+        self.dictionary = self.read_suspicious_keywords_dictionnary(
+            self.get_keywords_filepath())
 
     def get_keywords_filepath(self):
         dirname = os.path.dirname(__file__)
@@ -16,15 +18,13 @@ class SpeedLayer:
         pass
 
     def is_spam(self, email):
-        contains_mail_suspicious_keyword = self.contains_mail_suspicious_keyword(email)
-        is_sender_spammer_in_views = self.is_sender_spammer_in_views(email['sender'])
-        check_spam_with_dictionary = self.check_spam_with_dictionary(self.dictionary, email)
-        return contains_mail_suspicious_keyword or is_sender_spammer_in_views or check_spam_with_dictionary
+        is_sender_in_spam_view = self.is_sender_in_spam_view(
+            email['sender'])
+        is_spam_by_wordlist = self.is_spam_by_wordlist(
+            self.dictionary, email)
+        return is_sender_in_spam_view or is_spam_by_wordlist
 
-    def contains_mail_suspicious_keyword(self, email):
-        return "fuckfuckfuck" in email['body']
-
-    def is_sender_spammer_in_views(self, email):
+    def is_sender_in_spam_view(self, email):
         matching_email_count = self.cassandra.execute(f"""
         SELECT email from spams where email='{email}';
         """)
@@ -34,8 +34,7 @@ class SpeedLayer:
         with open(filePath, 'r') as f:
             return [keyword for keyword in f if keyword]
 
-    def check_spam_with_dictionary(self, list_dictionary, email):
-        spam_word_counter = 0
+    def is_spam_by_wordlist(self, list_dictionary, email):
         for item in list_dictionary:
             if item in email["body"]:
                 spam_word_counter += 1
