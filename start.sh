@@ -1,3 +1,4 @@
+# @author: flololan  
 echo '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Welcome to the most advance Big Data-Project in the WORLD!'
 echo 'I will start launching the Sender and receiver now... Please hold the lion!'
