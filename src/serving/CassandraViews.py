@@ -2,7 +2,7 @@ from .CassandraWrapper import CassandraWrapper
 
 
 class CassandraViews (CassandraWrapper):
-    LOG_TABLE = 'spamCounterLog'
+    LOG_TABLE = 'spamsCounterLog'
 
     def __init__(self):
         self.spamsViewTableCounter = 0
