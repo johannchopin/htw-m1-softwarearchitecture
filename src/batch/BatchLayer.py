@@ -11,7 +11,7 @@ class BatchLayer:
         self._insert_email_in_db(email)
 
     def _get_email_id(self, email: Email):
-        return email['sender'] + email['receiver'] + str(email['timestamp'])
+        return hash(email['sender'] + email['receiver'] + str(email['timestamp']))
 
     def _insert_email_in_db(self, email):
         self.cassandra.execute(f"""

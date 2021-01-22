@@ -1,7 +1,7 @@
 import os
+from time import time
 from typing import Set
 from datetime import datetime
-from dateutil import parser as datetimeParser
 from ..EmailChecker import EmailChecker
 from ..serving.CassandraViews import CassandraViewsInstance
 from .CassandraWrapper import CassandraWrapper
@@ -14,8 +14,9 @@ PERCENTAGE_OF_SPAMS_TO_BLACKLIST = 0.2
 class BatchProcessing:
     def __init__(self, masterDatasetCassandraInstance):
         self.emailChecker = EmailChecker()
-        self.cassandraMasterDataset = CassandraWrapper()
+        self.cassandraMasterDataset = masterDatasetCassandraInstance
         self.cassandraViews = CassandraViewsInstance
+        self.spamCountForThisView = 0
 
     def getSendersEmailAdress(self) -> Set[str]:
         sendersResponse = self.cassandraMasterDataset.execute(
@@ -31,7 +32,10 @@ class BatchProcessing:
             for emailAdress in senderEmailAdresses:
                 self.processEmail(emailAdress)
 
-            print(f"{self.cassandraViews.getSpamsTableName()} has been populated")
+            self.cassandraViews.addSpamLog(
+                int(time() * 10**6), self.spamCountForThisView)
+
+            self.spamCountForThisView = 0  # reset counter
             self.cassandraViews.use_next_table()
 
     def areEmailsFromFlood(self, emails, emailsCount):
@@ -64,10 +68,12 @@ class BatchProcessing:
 
         if self.areEmailsFromFlood(emailsResponse, emailsCount):
             self.insert_email_into_spam_view(emailAddress)
+            self.spamCountForThisView += 1  # An email has been detected as spam
         else:
             for email in emailsResponse:
                 if self.emailChecker.isSpam({'body': email.body}):
                     self.insert_email_into_spam_view(emailAddress)
+                    self.spamCountForThisView += 1  # An email has been detected as spam
 
     def insert_email_into_spam_view(self, emailAddress):
         self.cassandraViews.execute(
