@@ -17,6 +17,9 @@
     "svelte": "^3.0.0"
   },
   "dependencies": {
+    "bootstrap": "^4.6.0",
+    "restapify": "^0.0.20",
+    "restapify-cli": "^0.0.1",
     "sirv-cli": "^1.0.0"
   }
 }
