@@ -7,7 +7,8 @@ from ..EmailChecker import EmailChecker
 
 EMAIL_CHUNKS_LENGTH = 20
 EMAIL_SENT_LIMIT_IN_INTERVAL = 2 * 10 ^ 6
-PERCENTAGE_OF_SPAMS_TO_BLACKLISTED = 0.2
+PERCENTAGE_OF_SPAMS_TO_BLACKLIST = 0.2
+
 
 class BatchProcessing:
     def __init__(self, masterDatasetCassandraInstance):
@@ -49,8 +50,7 @@ class BatchProcessing:
             if isSpam:
                 emailContainingSpamWordsCounter += 1
         # Blacklist if 20% of emails are a spam
-        return (emailContainingSpamWordsCounter / emailsCount) > PERCENTAGE_OF_SPAMS_TO_BLACKLISTED
-
+        return (emailContainingSpamWordsCounter / emailsCount) > PERCENTAGE_OF_SPAMS_TO_BLACKLIST
 
     def processEmail(self, emailAddress):
         emailsResponse = self.cassandraMasterDataset.execute(
@@ -58,7 +58,8 @@ class BatchProcessing:
         emailsCount = len(emailsResponse._current_rows)
 
         isFlood = self.areEmailsFromFlood(emailsResponse, emailsCount)
-        emailContainsSpamWords = self.emailsContainsSpamWords(emailsResponse, emailsCount)
+        emailContainsSpamWords = self.emailsContainsSpamWords(
+            emailsResponse, emailsCount)
         if isFlood or emailContainsSpamWords:
             # self.cassandraViews.execute(f"INSERT INTO {self.cassandraViews.getSpamsTableName()}(email) VALUES('{emailAddress}')")
             print(emailAddress)
