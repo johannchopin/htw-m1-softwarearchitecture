@@ -1,20 +1,23 @@
 <script>
 	import { onMount } from 'svelte';
+	import CountsCharts from './CountsCharts.svelte'
 	const API_ROOT = 'http://localhost:2020'
-	let spams = [];
+	let spamsCounts = [];
 
-	const fetchSpams = () => {
-		fetch(`${API_ROOT}/spams`).then((response) => {
-			console.log(response.body)
+	const fetchSpamsCounts = () => {
+		fetch(`${API_ROOT}/spams/count`, {contentType: 'application/json'}).then((response) => {
+			response.json()
+			.then((spamsResponse) => {
+				spamsCounts = spamsResponse
+			})
 		}).catch(() => {
-			spams = ["test@test.com", "test2@test.com"]
+			alert('error')
 		})
 	}
 
 	onMount(async () => {
-		fetchSpams()
 		const intervalInstance = setInterval(() => {
-			fetchSpams()
+			fetchSpamsCounts()
 		}, 5000)
 	})
 
@@ -22,11 +25,14 @@
 
 <main>
 	Hi penis
+	<!--
 	<ul id="spams" class="list-group">
 		{#each spams as spam}
 			<li class="list-group-item">{spam}</li>
 		{/each}
 	</ul>
+	-->
+	<CountsCharts spamsData={spamsCounts}/>
 </main>
 
 <style>
