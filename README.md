@@ -25,7 +25,7 @@ Launch receiver: `python -m src.entry.receiver`
 Run Batch processing and start producing the views into the serving: `python -m src.batch.BatchProcessing`
 
 ### Launch overview dashboard
-Launch API: `cd src && python3 -m flask run`
+Launch API: `cd src && sudo python3 -m flask run --host=127.0.0.1 --port=2020`
 
 
 (Run PySpark : `python src/batch/pyspark-processing`)
