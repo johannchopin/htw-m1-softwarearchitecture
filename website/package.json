@@ -14,10 +14,12 @@
     "rollup-plugin-livereload": "^2.0.0",
     "rollup-plugin-svelte": "^7.0.0",
     "rollup-plugin-terser": "^7.0.0",
-    "svelte": "^3.0.0"
+    "svelte": "^3.0.0",
+    "svelte-fusioncharts": "^1.0.0"
   },
   "dependencies": {
     "bootstrap": "^4.6.0",
+    "fusioncharts": "^3.16.0",
     "restapify": "^0.0.20",
     "restapify-cli": "^0.0.1",
     "sirv-cli": "^1.0.0"
