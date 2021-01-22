@@ -3,7 +3,6 @@ from ..serving.CassandraViews import CassandraViewsInstance
 from ..EmailChecker import EmailChecker
 
 
-
 class SpeedLayer:
     def __init__(self):
         self.cassandra = CassandraViewsInstance
@@ -25,6 +24,6 @@ class SpeedLayer:
 
     def is_sender_in_spam_view(self, email):
         matching_email_count = self.cassandra.execute(f"""
-        SELECT email from spams where email='{email}';
+        SELECT email from {self.cassandra.getSpamsTableName()} where email='{email}';
         """)
         return len(matching_email_count._current_rows)
