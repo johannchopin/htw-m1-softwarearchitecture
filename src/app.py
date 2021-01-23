@@ -8,8 +8,10 @@ CORS(app)
 
 cassandra = CassandraWrapper()
 
+
 def getSpamsFromView():
     return cassandra.execute("select * from spamsCounterLog;")
+
 
 @app.route('/spams/count')
 def spams():
@@ -27,6 +29,7 @@ def spams():
         spams.append(spam)
 
     return jsonify(spams)
+
 
 @app.route('/spams/count')
 def spamsCounter():
