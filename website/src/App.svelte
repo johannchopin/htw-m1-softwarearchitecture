@@ -1,8 +1,10 @@
 <script>
 	import { onMount } from 'svelte';
 	import CountsCharts from './CountsCharts.svelte'
+	import EmailCountsCharts from './EmailCountsCharts.svelte'
 	const API_ROOT = 'http://localhost:2020'
 	let spamsCounts = [];
+	let emailsCountInMasterDataset = []
 
 	const fetchSpamsCounts = () => {
 		fetch(`${API_ROOT}/spams/count`).then((response) => {
@@ -11,16 +13,30 @@
 				spamsCounts = spamsResponse
 			})
 		}).catch(() => {
-			alert('error')
+			console.error('error')
+		})
+	}
+
+	const fetchEmailsCounts = () => {
+		fetch(`${API_ROOT}/emails/count`).then((response) => {
+			response.json()
+			.then((countResponse) => {
+				emailsCountInMasterDataset = [...emailsCountInMasterDataset, countResponse.count]
+			})
+		}).catch(() => {
+			console.error('error')
 		})
 	}
 
 	onMount(async () => {
-		const intervalInstance = setInterval(() => {
+		const spamsCountsIntervalInstance = setInterval(() => {
 			fetchSpamsCounts()
 		}, 2000)
-	})
 
+		const emailsCountsIntervalInstance = setInterval(() => {
+			fetchEmailsCounts()
+		}, 500)
+	})
 </script>
 
 <main>
@@ -33,6 +49,7 @@
 	</ul>
 	-->
 	<CountsCharts spamsData={spamsCounts}/>
+	<EmailCountsCharts counts={emailsCountInMasterDataset}/>
 </main>
 
 <style>
