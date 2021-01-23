@@ -5,12 +5,19 @@ from ..EmailChecker import EmailChecker
 
 class SpeedLayer:
     def __init__(self):
+        self.detectedSpamCount = 0
         self.cassandra = CassandraViewsInstance
         self.emailChecker = EmailChecker()
 
     def process_email(self, email):
-        print(self.is_spam(email))
-        pass
+        if self.is_spam(email):
+            print(f"Spam detected in Speed layer from {email['sender']}")
+            self.detectedSpamCount += 1
+            self.storeDetectedSpamCountInView()
+
+    def storeDetectedSpamCountInView(self):
+        if self.detectedSpamCount % 10 == 0:
+            self.cassandra.addSpamAmountDetectedBySpeed(self.detectedSpamCount)
 
     def _read_spam_keywords(self, filePath) -> List[str]:
         with open(filePath, 'r') as f:

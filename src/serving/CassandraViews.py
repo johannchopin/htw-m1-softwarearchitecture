@@ -1,8 +1,10 @@
+from time import time
 from .CassandraWrapper import CassandraWrapper
 
 
 class CassandraViews (CassandraWrapper):
     LOG_TABLE = 'spamsCounterLog'
+    SPAM_AMOUNT_DETECTED_BY_SPEED_TABLE = 'spamAmountDetectedBySpeed'
 
     def __init__(self):
         self.spamsViewTableCounter = 0
@@ -11,6 +13,8 @@ class CassandraViews (CassandraWrapper):
             f"create table {self.getSpamsTableName()} ( email TEXT PRIMARY KEY);")
         self._execute_silently(
             f"create table {CassandraViews.LOG_TABLE} (timestamp TEXT PRIMARY KEY, spamCount BIGINT)")  # Related to addSpamLog
+        self._execute_silently(
+            f"create table {CassandraViews.SPAM_AMOUNT_DETECTED_BY_SPEED_TABLE} (timestamp TEXT PRIMARY KEY, spamCount BIGINT)")
 
     def init_next_table(self):
         self._execute_silently(
@@ -32,6 +36,11 @@ class CassandraViews (CassandraWrapper):
     def addSpamLog(self, timestamp: int, spamCount: int):
         self.execute(
             f"INSERT INTO {CassandraViews.LOG_TABLE}(timestamp, spamCount) VALUES ('{timestamp}', {spamCount})")
+
+    def addSpamAmountDetectedBySpeed(self, amount):
+        now = int(time() * 10**6)
+        self.execute(
+            f"INSERT INTO {CassandraViews.SPAM_AMOUNT_DETECTED_BY_SPEED_TABLE}(timestamp, spamCount) VALUES ('{now}', {amount})")
 
 
 CassandraViewsInstance = CassandraViews()
