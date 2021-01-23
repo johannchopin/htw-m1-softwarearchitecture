@@ -25,6 +25,7 @@ Launch receiver: `python -m src.entry.receiver`
 Run Batch processing and start producing the views into the serving: `python -m src.batch.BatchProcessing`
 
 ### Launch overview dashboard
+Init and serve dashboard: `cd website && yarn && yarn start`
 Launch API: `cd src && sudo python3 -m flask run --host=127.0.0.1 --port=2020`
 
 
