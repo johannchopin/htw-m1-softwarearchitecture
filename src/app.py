@@ -1,17 +1,18 @@
 from flask import Flask, jsonify
-from .serving.CassandraWrapper import CassandraWrapper
+from .serving.CassandraWrapper import CassandraWrapper as ServingCassandraWrapper
+from .batch.CassandraWrapper import CassandraWrapper as BatchCassandraWrapper
 from flask_cors import CORS
-import json
 
 app = Flask(__name__)
 CORS(app)
 
-cassandra = CassandraWrapper()
-
+servingCassandra = ServingCassandraWrapper()
+batchCassandra = BatchCassandraWrapper()
 
 def getSpamsFromView():
-    return cassandra.execute("select * from spamsCounterLog;")
-
+    return servingCassandra.execute("select * from spamsCounterLog;")
+def getEmailsCountNumber():
+    return batchCassandra.execute("select count(*) from emails;")._current_rows[0].count
 
 @app.route('/spams/count')
 def spams():
@@ -30,10 +31,6 @@ def spams():
 
     return jsonify(spams)
 
-
-@app.route('/spams/count')
-def spamsCounter():
-    spamsResponse = getSpamsFromView()
-    spamsResponseCount = len(spamsResponse._current_rows)
-
-    return jsonify({"count": spamsResponseCount})
+@app.route('/emails/count')
+def emailsCount():
+    return jsonify({"count": getEmailsCountNumber()})
