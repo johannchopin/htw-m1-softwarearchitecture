@@ -48,8 +48,10 @@
 		{/each}
 	</ul>
 	-->
-	<CountsCharts spamsData={spamsCounts}/>
-	<EmailCountsCharts counts={emailsCountInMasterDataset}/>
+	<div class="d-flex">
+		<CountsCharts spamsData={spamsCounts}/>
+		<EmailCountsCharts counts={emailsCountInMasterDataset}/>
+	</div>
 </main>
 
 <style>
