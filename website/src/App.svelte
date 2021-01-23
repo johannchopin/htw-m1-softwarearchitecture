@@ -1,7 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
-	import CountsCharts from './CountsCharts.svelte'
-	import EmailCountsCharts from './EmailCountsCharts.svelte'
+	import CountsCharts from './CountsChart.svelte'
+	import EmailCountsCharts from './EmailCountsChart.svelte'
 	const API_ROOT = 'http://localhost:2020'
 	let spamsCounts = [];
 	let emailsCountInMasterDataset = []
