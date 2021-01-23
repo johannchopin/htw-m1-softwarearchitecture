@@ -5,7 +5,7 @@
 	let spamsCounts = [];
 
 	const fetchSpamsCounts = () => {
-		fetch(`${API_ROOT}/spams/count`, {contentType: 'application/json'}).then((response) => {
+		fetch(`${API_ROOT}/spams/count`).then((response) => {
 			response.json()
 			.then((spamsResponse) => {
 				spamsCounts = spamsResponse
@@ -18,13 +18,13 @@
 	onMount(async () => {
 		const intervalInstance = setInterval(() => {
 			fetchSpamsCounts()
-		}, 5000)
+		}, 2000)
 	})
 
 </script>
 
 <main>
-	Hi penis
+	<h1>λ architecture overview</h1>
 	<!--
 	<ul id="spams" class="list-group">
 		{#each spams as spam}

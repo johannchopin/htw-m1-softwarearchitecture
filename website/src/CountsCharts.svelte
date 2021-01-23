@@ -6,8 +6,6 @@
 
   export let spamsData
 
-  $: console.log(spamsData)
-
   const getChartData = (data) => {
     const sortedTimestamps = data.map(a => parseInt(a.timestamp)).sort()
     let chartData = []
@@ -15,8 +13,6 @@
     sortedTimestamps.forEach(timestamp => {
       chartData.push([timestamp, data.find(elmt => elmt.timestamp === timestamp.toString()).count])
     });
-
-    console.log(chartData)
 
     return chartData.map((spam) => {
       return {
