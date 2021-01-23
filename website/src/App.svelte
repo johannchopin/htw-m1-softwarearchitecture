@@ -54,6 +54,15 @@
 	</div>
 </main>
 
+<footer class="d-flex justify-content-center">
+	<ul class="list-group list-group-horizontal">
+		<li class="list-group-item">Chopin Johann</li>
+		<li class="list-group-item">Duflot Quentin</li>
+		<li class="list-group-item">Guidoux Alexandre</li>
+		<li class="list-group-item">Weiss Florian</li>
+	</ul>
+</footer>
+
 <style>
 	main {
 		text-align: center;
