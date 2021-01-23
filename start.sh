@@ -1,17 +1,19 @@
 # @author: flololan  
 echo '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Welcome to the most advance Big Data-Project in the WORLD!'
-echo 'I will start launching the Sender and receiver now... Please hold the lion!'
-echo 'Doing some cleanup... You dirty little piece of shit
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
+Welcome to the BigData - Lambda - Demo'
+echo 'This demo has been made by:
+ Johann Chopin, Quentin Duflot, Alexandre Guidoux and Florian Weiss'
+echo '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Doing some cleanup....
+'
 docker stop cassandra_b 2> /dev/null ;
 docker rm cassandra_b 2> /dev/null ;
 echo '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Building Cassandra-Image.... Just to make sure...
+Building Cassandra-Image.... Just to make sure it is up to date...
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
 docker build -t cassandra-batch src/batch ;
 echo '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Starting Cassandra-Batch-Container
+Starting Cassandra-Batch-Container...
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
 docker run -d -p 9042:9042 --name cassandra_b cassandra-batch ;
 echo '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -21,7 +23,7 @@ sleep 20
 #echo 'Starting PySpark'
 #python src/batch/pyspark-processing &
  
-echo '+++++++Okay... Lets go to work.... OH YEAH!+++++++'
+echo '+++++++Okay... Let us go to work....+++++++'
 
 echo '+++++++Starting sender...+++++++'
 python3 -m src.entry.sender &
