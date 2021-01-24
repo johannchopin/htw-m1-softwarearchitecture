@@ -27,7 +27,7 @@
 
   $: dataSource = {
     chart: {
-      caption: 'Detected spams emails from batch process',
+      caption: 'Amount of senders detected as spammer by Batch layer',
       xAxisName: 'Timestamp',
       yAxisName: 'Detected spams',
       theme: 'fusion'

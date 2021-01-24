@@ -2,9 +2,11 @@
 	import { onMount } from 'svelte';
 	import CountsCharts from './CountsChart.svelte'
 	import EmailCountsCharts from './EmailCountsChart.svelte'
+	import SpamsAmountSpeedVsBatchChart from './SpamsAmountSpeedVsBatchChart.svelte'
 	const API_ROOT = 'http://localhost:2020'
 	let spamsCounts = [];
 	let emailsCountInMasterDataset = []
+	let spamsEmailSpeedBatch = []
 
 	const fetchSpamsCounts = () => {
 		fetch(`${API_ROOT}/spams/count`).then((response) => {
@@ -28,6 +30,23 @@
 		})
 	}
 
+	const fetchSpeedBatchSpamsDetectionCounts = () => {
+		fetch(`${API_ROOT}/difference/batch-speed/spams/count`).then((response) => {
+			response.json()
+			.then((countResponse) => {
+				const now = new Date().getTime()
+				const data = {
+					timestamp: now,
+					batch: countResponse.batch,
+					speed: countResponse.speed
+				}
+				spamsEmailSpeedBatch = [...spamsEmailSpeedBatch, data]
+			})
+		}).catch(() => {
+			console.error('error')
+		})
+	}
+
 	onMount(async () => {
 		const spamsCountsIntervalInstance = setInterval(() => {
 			fetchSpamsCounts()
@@ -36,6 +55,10 @@
 		const emailsCountsIntervalInstance = setInterval(() => {
 			fetchEmailsCounts()
 		}, 500)
+
+		const speedBatchSpamsDetectionCountsIntervalInstance = setInterval(() => {
+			fetchSpeedBatchSpamsDetectionCounts()
+		}, 1000)
 	})
 </script>
 
@@ -51,6 +74,7 @@
 	<div class="d-flex">
 		<CountsCharts spamsData={spamsCounts}/>
 		<EmailCountsCharts counts={emailsCountInMasterDataset}/>
+		<SpamsAmountSpeedVsBatchChart data={spamsEmailSpeedBatch} />
 	</div>
 </main>
 
