@@ -9,10 +9,11 @@ from .fakeEmails import Email, generateEmailAdresses, generateEmails
 DATA_PATH = Path("./data")
 CASSANDRA = CassandraWrapper()
 CHUNK_AMOUNT_LIMIT = 100
-EMAIL_ADRESS_AMOUNT = 200
+EMAIL_ADRESS_AMOUNT = 100
+SPAMMER_IN_ADRESSES = 10
 EMAIL_IN_CHUNK = 250
-SPAM_RATE = 0.1
-FLOOD_RATE_PER_CHUNK = 0.1
+SPAM_RATE = 0.001
+FLOOD_RATE_PER_CHUNK = 0.001
 SLEEP_TIME_IN_S = 1
 
 
@@ -39,6 +40,7 @@ def run():
 
     # Set up
     emailsAdresses = generateEmailAdresses(EMAIL_ADRESS_AMOUNT)
+    emailsAdressesOfSpammer = emailsAdresses[:SPAMMER_IN_ADRESSES]
     mkdir_if_not_exists(DATA_PATH)
 
     # Main
@@ -50,7 +52,7 @@ def run():
 
         startTime = time.time()
         filepath = DATA_PATH.joinpath(str(email_chunk))
-        emails = list(map(toDict, generateEmails(emailsAdresses, spam_rate=SPAM_RATE,
+        emails = list(map(toDict, generateEmails(emailsAdresses, spammerAdresses=emailsAdressesOfSpammer,spam_rate=SPAM_RATE,
                                                  flood_rate=FLOOD_RATE_PER_CHUNK, email_amount=EMAIL_IN_CHUNK)))
 
         with open(filepath, 'w') as f:
