@@ -9,7 +9,7 @@ from .fakeEmails import Email, generateEmailAdresses, generateEmails
 DATA_PATH = Path("./data")
 CASSANDRA = CassandraWrapper()
 CHUNK_AMOUNT_LIMIT = 100
-EMAIL_ADRESS_AMOUNT = 100
+EMAIL_ADRESS_AMOUNT = 10_000
 EMAIL_IN_CHUNK = 250
 SPAM_RATE = 0.1
 FLOOD_RATE_PER_CHUNK = 0.1

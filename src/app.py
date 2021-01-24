@@ -43,7 +43,6 @@ def getSpamsAmountDetectedByBatch():
     counts.sort()
     return counts[-1]
     
-print(getSpamsAmountDetectedByBatch())
 
 # Spams sender count history
 @app.route('/spams/count')
