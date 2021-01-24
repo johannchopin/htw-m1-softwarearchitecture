@@ -1,6 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
-	import CountsCharts from './CountsChart.svelte'
+	import SenderSpammerCountsChart from './SenderSpammerCountsChart.svelte'
 	import EmailCountsCharts from './EmailCountsChart.svelte'
 	import SpamsAmountSpeedVsBatchChart from './SpamsAmountSpeedVsBatchChart.svelte'
 	const API_ROOT = 'http://localhost:2020'
@@ -72,7 +72,7 @@
 	</ul>
 	-->
 	<div class="d-flex">
-		<CountsCharts spamsData={spamsCounts}/>
+		<SenderSpammerCountsChart spamsData={spamsCounts}/>
 		<EmailCountsCharts counts={emailsCountInMasterDataset}/>
 		<SpamsAmountSpeedVsBatchChart data={spamsEmailSpeedBatch} />
 	</div>
