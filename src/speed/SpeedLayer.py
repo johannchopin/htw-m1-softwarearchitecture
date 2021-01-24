@@ -1,4 +1,5 @@
 from typing import List
+from cassandra import InvalidRequest
 from ..serving.CassandraViews import CassandraViewsInstance
 from ..EmailChecker import EmailChecker
 
@@ -30,7 +31,11 @@ class SpeedLayer:
         return is_sender_in_spam_view or isEmailContainingSpamWords
 
     def is_sender_in_spam_view(self, email):
-        matching_email_count = self.cassandra.execute(f"""
-        SELECT email from {self.cassandra.getSpamsTableName()} where email='{email}';
-        """)
+        try:
+            matching_email_count = self.cassandra.execute(f"""
+            SELECT email from {self.cassandra.getSpamsTableName()} where email='{email}';
+            """)
+        except InvalidRequest:
+            self.cassandra.spamsViewTableCounter += 1
+            return self.is_sender_in_spam_view(email)
         return len(matching_email_count._current_rows) > 0
