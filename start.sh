@@ -24,7 +24,7 @@ docker run -d -p 9042:9042 --name cassandra_b cassandra-batch ;
 echo '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Sleeping for 20 Seconds to let the slow pc start up everything...
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
-sleep 20
+sleep 20 ;
 #echo 'Starting PySpark'
 #python src/batch/pyspark-processing &
  
@@ -32,15 +32,17 @@ echo '+++++++Okay... Let us go to work....+++++++'
 
 echo '+++++++Starting sender...+++++++'
 python3 -m src.entry.sender &
+sleep 5 ;
 echo '+++++++Starting receiver...+++++++'
 python3 -m src.entry.receiver &
+sleep 5 ;
 echo
 echo 'Waiting again... Sorry for that. How is you day so far?'
-sleep 5
+sleep 5 ;
 echo '+++++++Starting Batch processing++++++++'
 python3 -m src.batch.BatchProcessing &
 echo 'Starting API'
-cd src && sudo python3 -m flask run --host=127.0.0.1 --port=2020 &
+cd src && pwd && sudo python3 -m flask run --host=127.0.0.1 --port=2020 &
 cd ..
 echo
 echo 'Launching our beautiful dashboard...'
