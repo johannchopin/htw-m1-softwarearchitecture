@@ -8,3 +8,4 @@ venv
 .venv
 .vscode
 website/yarn-error.log
+website/package-lock.json
