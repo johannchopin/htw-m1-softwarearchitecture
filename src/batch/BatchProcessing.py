@@ -10,13 +10,13 @@ EMAIL_CHUNKS_LENGTH = 20
 EMAIL_SENT_LIMIT_IN_INTERVAL = 2 * 10 ^ 6
 PERCENTAGE_OF_SPAMS_TO_BLACKLIST = 0.2
 
-
 class BatchProcessing:
     def __init__(self, masterDatasetCassandraInstance):
         self.emailChecker = EmailChecker()
         self.cassandraMasterDataset = masterDatasetCassandraInstance
         self.cassandraViews = CassandraViewsInstance
-        self.spamCountForThisView = 0
+        self.spamSenderCount = 0
+        self.spamEmailsCount = 0
 
     def getSendersEmailAdress(self) -> Set[str]:
         sendersResponse = self.cassandraMasterDataset.execute(
@@ -32,11 +32,14 @@ class BatchProcessing:
             for emailAdress in senderEmailAdresses:
                 self.processEmail(emailAdress)
 
-            self.cassandraViews.addSpamLog(
-                int(time() * 10**6), self.spamCountForThisView)
-
-            self.spamCountForThisView = 0  # reset counter
+            timestamp = int(time() * 10**6)
+            self.cassandraViews.addSpamLog(timestamp, self.spamSenderCount)
+            self.cassandraViews.addSpamAmountDetectedByBatch(self.spamEmailsCount)
+            
+            self.spamSenderCount = 0  # reset counter
+            self.spamEmailsCount = 0 # reset counter
             self.cassandraViews.use_next_table()
+            print("Batch process finished")
 
     def areEmailsFromFlood(self, emails, emailsCount):
         # TODO: refactor to for loop
@@ -68,12 +71,17 @@ class BatchProcessing:
 
         if self.areEmailsFromFlood(emailsResponse, emailsCount):
             self.insert_email_into_spam_view(emailAddress)
-            self.spamCountForThisView += 1  # An email has been detected as spam
+            self.spamSenderCount += 1  # An email has been detected as spam
+            self.spamEmailsCount += emailsCount
         else:
+            oneSpamHasBeenDetected = False
             for email in emailsResponse:
                 if self.emailChecker.isSpam({'body': email.body}):
-                    self.insert_email_into_spam_view(emailAddress)
-                    self.spamCountForThisView += 1  # An email has been detected as spam
+                    oneSpamHasBeenDetected = True
+                    self.spamEmailsCount += 1
+            if oneSpamHasBeenDetected:
+                self.insert_email_into_spam_view(emailAddress)
+                self.spamSenderCount += 1  # An email has been detected as spam
 
     def insert_email_into_spam_view(self, emailAddress):
         self.cassandraViews.execute(
