@@ -33,4 +33,4 @@ class SpeedLayer:
         matching_email_count = self.cassandra.execute(f"""
         SELECT email from {self.cassandra.getSpamsTableName()} where email='{email}';
         """)
-        return len(matching_email_count._current_rows)
+        return len(matching_email_count._current_rows) > 0
