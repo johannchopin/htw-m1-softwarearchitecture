@@ -93,11 +93,11 @@ def generateEmails(emailAdresses: List[EmailAddress], spammerAdresses=[], spam_r
     emails = []
     if random() < flood_rate:
         emails.extend(generateFloodEmail(
-            spammerAdresses, randint(0, email_amount)))
-
-    email_amount_left = email_amount - len(emails)
-    emails.extend((generateSimpleEmail(emailAdresses, spammerAdresses=spammerAdresses, spam_rate=spam_rate)
-                   for _ in range(email_amount_left)))
+            spammerAdresses, email_amount))  # randint(0, email_amount)
+    else:
+        email_amount_left = email_amount - len(emails)
+        emails.extend((generateSimpleEmail(emailAdresses=emailAdresses, spammerAdresses=spammerAdresses, spam_rate=spam_rate)
+                       for _ in range(email_amount_left)))
     return emails
 
 
