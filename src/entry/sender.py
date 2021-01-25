@@ -41,6 +41,7 @@ def run():
     # Set up
     emailsAdresses = generateEmailAdresses(EMAIL_ADRESS_AMOUNT)
     emailsAdressesOfSpammer = emailsAdresses[:SPAMMER_IN_ADRESSES]
+    emailsAdresses = emailsAdresses[SPAMMER_IN_ADRESSES:]
     mkdir_if_not_exists(DATA_PATH)
 
     # Main
@@ -52,7 +53,7 @@ def run():
 
         startTime = time.time()
         filepath = DATA_PATH.joinpath(str(email_chunk))
-        emails = list(map(toDict, generateEmails(emailsAdresses, spammerAdresses=emailsAdressesOfSpammer,spam_rate=SPAM_RATE,
+        emails = list(map(toDict, generateEmails(emailsAdresses, spammerAdresses=emailsAdressesOfSpammer, spam_rate=SPAM_RATE,
                                                  flood_rate=FLOOD_RATE_PER_CHUNK, email_amount=EMAIL_IN_CHUNK)))
 
         with open(filepath, 'w') as f:
