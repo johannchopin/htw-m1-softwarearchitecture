@@ -40,9 +40,7 @@ def run():
 
     # Set up
     emailsAdresses = generateEmailAdresses(EMAIL_ADRESS_AMOUNT)
-    emailsAdressesOfSpammer = []  # emailsAdresses[:SPAMMER_IN_ADRESSES-2]
-    emailsAdressesOfSpammer.append('Yolo@toto.com')
-    emailsAdressesOfSpammer.append('Yolo2@toto.com')
+    emailsAdressesOfSpammer = emailsAdresses[:SPAMMER_IN_ADRESSES]
     emailsAdresses = emailsAdresses[SPAMMER_IN_ADRESSES:]
     mkdir_if_not_exists(DATA_PATH)
 
