@@ -6,8 +6,8 @@ from ..EmailChecker import EmailChecker
 from ..serving.CassandraViews import CassandraViewsInstance
 from .CassandraWrapper import CassandraWrapper
 
-EMAIL_CHUNKS_LENGTH = 20
-EMAIL_SENT_LIMIT_IN_INTERVAL = 2 * 10 ^ 6
+EMAIL_CHUNKS_LENGTH = 200
+EMAIL_SENT_LIMIT_IN_INTERVAL = 30
 PERCENTAGE_OF_SPAMS_TO_BLACKLIST = 0.2
 
 class BatchProcessing:
