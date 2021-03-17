@@ -1,11 +1,15 @@
 from src.speed.SpeedLayer import SpeedLayer
 import time
 import os
+import sys
 import json
 from pathlib import Path
 from typing import List
 from .fakeEmails import Email
 from ..batch import BatchLayer
+
+if '-q' in sys.argv:
+    sys.stdout = open(os.devnull, 'w')
 
 
 class Receiver:

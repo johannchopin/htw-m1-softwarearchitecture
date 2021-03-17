@@ -9,12 +9,14 @@ class SpeedLayer:
         self.detectedSpamCount = 0
         self.cassandra = CassandraViewsInstance
         self.emailChecker = EmailChecker()
+        self.emailAdresses = set()
 
     def process_email(self, email):
         if self.is_spam(email):
             print(f"Spam detected in Speed layer from {email['sender']}")
             self.detectedSpamCount += 1
             self.storeDetectedSpamCountInView()
+            self.emailAdresses.add(email['sender'])
 
     def storeDetectedSpamCountInView(self):
         if self.detectedSpamCount % 10 == 0:

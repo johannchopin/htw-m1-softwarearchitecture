@@ -1,4 +1,5 @@
 import os
+import sys
 from time import time
 from typing import Set
 from datetime import datetime
@@ -9,6 +10,10 @@ from .CassandraWrapper import CassandraWrapper
 EMAIL_CHUNKS_LENGTH = 20
 EMAIL_SENT_LIMIT_IN_INTERVAL = 2 * 10 ^ 6
 PERCENTAGE_OF_SPAMS_TO_BLACKLIST = 0.2
+
+if '-q' in sys.argv:
+    sys.stdout = open(os.devnull, 'w')
+
 
 class BatchProcessing:
     def __init__(self, masterDatasetCassandraInstance):
@@ -34,10 +39,11 @@ class BatchProcessing:
 
             timestamp = int(time() * 10**6)
             self.cassandraViews.addSpamLog(timestamp, self.spamSenderCount)
-            self.cassandraViews.addSpamAmountDetectedByBatch(self.spamEmailsCount)
-            
+            self.cassandraViews.addSpamAmountDetectedByBatch(
+                self.spamEmailsCount)
+
             self.spamSenderCount = 0  # reset counter
-            self.spamEmailsCount = 0 # reset counter
+            self.spamEmailsCount = 0  # reset counter
             self.cassandraViews.use_next_table()
             print("Batch process finished")
 

@@ -1,4 +1,5 @@
 import os
+import sys
 import json
 import time
 from pathlib import Path
@@ -8,13 +9,16 @@ from .fakeEmails import Email, generateEmailAdresses, generateEmails
 
 DATA_PATH = Path("./data")
 CASSANDRA = CassandraWrapper()
-CHUNK_AMOUNT_LIMIT = 100
+CHUNK_AMOUNT_LIMIT = 10
 EMAIL_ADRESS_AMOUNT = 100
 SPAMMER_IN_ADRESSES = 10
 EMAIL_IN_CHUNK = 250
 SPAM_RATE = 0.1
 FLOOD_RATE_PER_CHUNK = 0.1
 SLEEP_TIME_IN_S = 1
+
+if '-q' in sys.argv:
+    sys.stdout = open(os.devnull, 'w')
 
 
 def run():

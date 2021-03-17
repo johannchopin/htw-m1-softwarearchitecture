@@ -19,9 +19,12 @@ deactivate
 Init: `npm i --prefix website`
 
 
+### Launch the λ
 
-### Launch the λ (or just use start.sh)
+Automatic launch: `./start.sh`
 
+---
+Manual Launch:
 Build cassandra image: `docker build -t cassandra-batch src/batch`  
 Run cassandra image: `docker run -d -p 9042:9042 --name cassandra_b cassandra-batch`
 
