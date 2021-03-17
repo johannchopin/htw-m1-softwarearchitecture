@@ -19,7 +19,7 @@ class CassandraWrapper:
             f"create keyspace {self.keyspace} WITH replication = {{'class':'SimpleStrategy', 'replication_factor' : 3}};")
         self.execute(f"USE {self.keyspace}")
         self._execute_silently(
-            "create table emails ( id TEXT PRIMARY KEY, sender TEXT, receiver TEXT, timestamp TEXT, subject TEXT, body TEXT);")
+            "create table emails ( id TEXT PRIMARY KEY, sender TEXT, receiver TEXT, timestamp TIMESTAMP, subject TEXT, body TEXT);")
 
     def _execute_silently(self, query):
         try:
