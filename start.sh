@@ -25,7 +25,7 @@ echo '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 Welcome to the BigData - Lambda Architecture - Demo'
 echo 'This demo has been made by:'
 echo 'Johann Chopin, Quentin Duflot, Alexandre Guidoux and Florian Weiss'
-echo 'Please check readme for installation instructions'
+echo 'Please check the README for installation instructions'
 echo '+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++'
 echo
 
