@@ -60,7 +60,7 @@ sleep 1
 echo 'Starting the batch processing'
 python3 -m src.batch.BatchProcessing -q &
 
-echo 'Starting API -- sudo is needed to run flask on a specific port'
+echo 'Starting API'
 export FLASK_RUN_PORT=2020
 cd src && python3 -m flask run --host=127.0.0.1 &
 
