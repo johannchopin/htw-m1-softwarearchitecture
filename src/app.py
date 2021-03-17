@@ -22,6 +22,10 @@ def getSpamsAmountDetectedBySpeed():
     spamsDetectedResponse = getSpamsAmountDetectedBySpeedResponse()
     spamsDetectedResponseCount = len(spamsDetectedResponse._current_rows)
 
+    noSpamsDetected = spamsDetectedResponseCount <= 0
+    if noSpamsDetected:
+        return 0
+
     for i in range(spamsDetectedResponseCount):
         spamResponse = spamsDetectedResponse._current_rows[i]
         count = spamResponse.spamcount
