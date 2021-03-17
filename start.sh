@@ -61,4 +61,4 @@ FLASK_RUN_PORT=2020
 cd src && python3 -m flask run --host=127.0.0.1 &
 
 echo 'Launching the dashboard...'
-cd website && npm run dev
+cd website && npm i && npm run dev
