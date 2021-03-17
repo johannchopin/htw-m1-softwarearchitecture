@@ -64,13 +64,6 @@
 
 <main>
 	<h1>λ architecture overview</h1>
-	<!--
-	<ul id="spams" class="list-group">
-		{#each spams as spam}
-			<li class="list-group-item">{spam}</li>
-		{/each}
-	</ul>
-	-->
 	<div class="d-flex">
 		<SenderSpammerCountsChart spamsData={spamsCounts}/>
 		<EmailCountsCharts counts={emailsCountInMasterDataset}/>
