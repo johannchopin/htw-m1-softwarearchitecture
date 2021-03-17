@@ -8,10 +8,7 @@
 exit_script() {
     # Exiting and killing all 
     echo 'Exiting...'
-    for job in $(jobs -p)
-    do
-        kill $job 2> /dev/null # Sends SIGTERM to child/sub processes
-    done
+    pkill -P $$
     # Clean docker
     docker stop cassandra_b > /dev/null
     docker rm cassandra_b > /dev/null
@@ -30,8 +27,8 @@ echo '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 echo
 
 echo 'Remove the running container and previous image'
-docker stop cassandra_b 2> /dev/null
-docker rm cassandra_b 2> /dev/null
+docker stop cassandra_b 1>/dev/null 2>&1 
+docker rm cassandra_b 1>/dev/null 2>&1
 
 echo 'Building the cassandra image'
 docker build -t cassandra-batch src/batch > /dev/null
