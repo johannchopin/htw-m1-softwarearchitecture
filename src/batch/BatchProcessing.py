@@ -8,7 +8,7 @@ from ..serving.CassandraViews import CassandraViewsInstance
 from .CassandraWrapper import CassandraWrapper
 
 EMAIL_CHUNKS_LENGTH = 200
-EMAIL_SENT_LIMIT_IN_INTERVAL = 30
+EMAIL_SENT_TIMESTAMP_LIMIT = 30
 PERCENTAGE_OF_SPAMS_TO_BLACKLIST = 0.2
 
 if '-q' in sys.argv:
@@ -51,10 +51,10 @@ class BatchProcessing:
         # TODO: refactor to for loop
         counter = 0
         while (counter + EMAIL_CHUNKS_LENGTH) < emailsCount:
-            timestamp1 = emails._current_rows[counter].timestamp
+            timestamp1 = emails._current_rows[counter].timestamp.timestamp()
             timestamp2 = emails._current_rows[counter +
-                                              EMAIL_CHUNKS_LENGTH].timestamp
-            if self._timestamp_diff(int(timestamp1), int(timestamp2)) <= EMAIL_SENT_LIMIT_IN_INTERVAL:
+                                              EMAIL_CHUNKS_LENGTH].timestamp.timestamp()
+            if self._timestamp_diff(timestamp1, timestamp2) <= EMAIL_SENT_TIMESTAMP_LIMIT:
                 return True
             counter += 1
         return False
@@ -93,8 +93,8 @@ class BatchProcessing:
         self.cassandraViews.execute(
             f"INSERT INTO {self.cassandraViews.getNextSpamsTableName()}(email) VALUES('{emailAddress}')")
 
-    def _timestamp_diff(self, timestamp1: int, timestamp2: int) -> bool:
-        return abs(timestamp1 - timestamp2)
+    def _timestamp_diff(self, timestamp1: float, timestamp2: float) -> int:
+        return int(abs(timestamp1 - timestamp2) * 10**3)
 
 
 if __name__ == "__main__":
