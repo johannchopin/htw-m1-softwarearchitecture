@@ -73,10 +73,10 @@
 
 <footer class="d-flex justify-content-center">
 	<ul class="list-group list-group-horizontal">
-		<li class="list-group-item">Johann Chopin</li>
-		<li class="list-group-item">Quentin Duflot</li>
-		<li class="list-group-item">Alexandre Guidoux</li>
-		<li class="list-group-item"><a href="https://fweiss.com">Florian Weiss</a></li>
+		<li class="list-group-item">Chopin Johann</li>
+		<li class="list-group-item">Duflot Quentin</li>
+		<li class="list-group-item">Guidoux Alexandre</li>
+		<li class="list-group-item">Weiss Florian</li>
 	</ul>
 </footer>
 
