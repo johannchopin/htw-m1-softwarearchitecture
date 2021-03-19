@@ -1,5 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
+	import Description from './Description.svelte'
 	import SenderSpammerCountsChart from './SenderSpammerCountsChart.svelte'
 	import EmailCountsCharts from './EmailCountsChart.svelte'
 	import SpamsAmountSpeedVsBatchChart from './SpamsAmountSpeedVsBatchChart.svelte'
@@ -64,11 +65,13 @@
 
 <main>
 	<h1>λ architecture overview</h1>
-	<div class="d-flex">
+	<div class="d-flex charts">
 		<SenderSpammerCountsChart spamsData={spamsCounts}/>
 		<EmailCountsCharts counts={emailsCountInMasterDataset}/>
 		<SpamsAmountSpeedVsBatchChart data={spamsEmailSpeedBatch} />
 	</div>
+
+	<Description />
 </main>
 
 <footer class="d-flex justify-content-center">
@@ -86,6 +89,11 @@
 		padding: 1em;
 		max-width: 240px;
 		margin: 0 auto;
+	}
+
+	.charts {
+		width: 100%;
+		overflow: scroll;
 	}
 
 	@media (min-width: 640px) {
