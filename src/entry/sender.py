@@ -50,7 +50,7 @@ def run():
 
     # Main
     email_chunk = get_latest_filename(DATA_PATH)
-    # Check tout les 1000 fichiers → si 5000 alors pause; puis recheck, si correct → generate email
+    # Check every 1000 files → if 5000 then pause; then recheck, if correct → generate email
     while True:
         waitIfFileChunkLimitReached(
             DATA_PATH, CHUNK_AMOUNT_LIMIT, SLEEP_TIME_IN_S)
