@@ -1,7 +1,32 @@
 # HTW M1 Softwarearchitecture
 
+## Getting started
+
+Before running the demo, the following tools must be installed on the system:
+- [Docker](https://www.docker.com/get-started)
+- [NodeJS](https://nodejs.org/en/)
+- [Python](https://www.python.org/downloads/)
+
+Install the required python dependencies:
+```bash
+sudo python3 -m pip install -r requirements.txt
+# Or use a virtual environment
+```
+
+Install the dependancies of the web interface:
+```bash
+npm i --prefix website
+```
+
+Finally, run the start script:
+```bash
+./start.sh
+```
+When the warm up is finished, the overview can be seen on http://localhost:5000
+
 ## Set up
-## Virtual Environment for python
+### Create the Virtual Environment for python
+
 ```bash
 # Create Venv 
 python3 -m venv .venv
@@ -9,13 +34,13 @@ python3 -m venv .venv
 source .venv/bin/activate
 # Install listed dependencies
 sudo python3 -m pip install -r requirements.txt
-# Export dependancies
+# Export dependencies
 python3 -m pip freeze > requirements.txt
 # Exit Virtual env
 deactivate
 ```
 
-## Init dashboard website
+### Install web interface dependencies
 Init: `npm i --prefix website`
 
 
