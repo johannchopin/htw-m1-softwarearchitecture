@@ -64,7 +64,7 @@
 
 <main>
 	<h1>λ architecture overview</h1>
-	<div class="d-flex">
+	<div class="d-flex charts">
 		<SenderSpammerCountsChart spamsData={spamsCounts}/>
 		<EmailCountsCharts counts={emailsCountInMasterDataset}/>
 		<SpamsAmountSpeedVsBatchChart data={spamsEmailSpeedBatch} />
@@ -86,6 +86,11 @@
 		padding: 1em;
 		max-width: 240px;
 		margin: 0 auto;
+	}
+
+	.charts {
+		width: 100%;
+		overflow: scroll;
 	}
 
 	@media (min-width: 640px) {
