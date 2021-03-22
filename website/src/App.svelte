@@ -1,6 +1,5 @@
 <script>
 	import { onMount } from 'svelte';
-	import Description from './Description.svelte'
 	import SenderSpammerCountsChart from './SenderSpammerCountsChart.svelte'
 	import EmailCountsCharts from './EmailCountsChart.svelte'
 	import SpamsAmountSpeedVsBatchChart from './SpamsAmountSpeedVsBatchChart.svelte'
@@ -70,8 +69,6 @@
 		<EmailCountsCharts counts={emailsCountInMasterDataset}/>
 		<SpamsAmountSpeedVsBatchChart data={spamsEmailSpeedBatch} />
 	</div>
-
-	<Description />
 </main>
 
 <footer class="d-flex justify-content-center">
